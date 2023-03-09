@@ -23,11 +23,11 @@ class FindFriends(commands.Cog):
 
     @commands.slash_command()
     @commands.dynamic_cooldown(find_friend_cooldown.discord_cooldown, type=commands.BucketType.user)
-    async def find(self, ctx: discord.ApplicationContext) -> None:
+    async def friend(self, ctx: discord.ApplicationContext) -> None:
         await ctx.send_modal(FindFriendModal())
 
-    @find.error
-    async def find_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:
+    @friend.error
+    async def friend_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:
         if isinstance(error, commands.CommandOnCooldown):
             text = messages.FIND_COOLDOWN.format(error.cooldown.per, error.retry_after)
             await ctx.respond(text, ephemeral=True)
