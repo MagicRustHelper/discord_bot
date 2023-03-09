@@ -16,7 +16,6 @@ class Settings(commands.Cog):
         'settings',
         description='Настройки бота',
         default_member_permissions=discord.Permissions(administrator=True),
-        # guild_ids=app_config.DISCORD_GUILD_IDS,
     )
 
     @settings.command(description='Изменение кулдауна на поиск друга.')

@@ -27,8 +27,8 @@ class FindFriendModal(discord.ui.Modal):
         )
         self.add_item(
             discord.ui.InputText(
-                label='Номер(а) сервера(-ов)',
-                placeholder='1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18',
+                label='Номер(а) сервера(-ов) MAGIC RUST',
+                placeholder='обязательно укажите НОМЕР(А) СЕРВЕРА(-ОВ) MR',
             )
         )
 
@@ -46,10 +46,9 @@ class FindFriendModal(discord.ui.Modal):
         )
         embed.add_field(name='', value=self.children[1].value, inline=False)
         embed.add_field(name='Сервера', value=self.children[2].value, inline=False)
-        embed.add_field(name='', value=interaction.user.mention)
 
         find_friend_channel = await interaction.guild.fetch_channel(client.settings.find_friends_channel)
-        await find_friend_channel.send(embed=embed)
+        await find_friend_channel.send(content=interaction.user.mention, embed=embed)
         await interaction.response.send_message('Форма отправлена.', ephemeral=True)
         # await interaction.response.send_message(embeds=[embed])
 
