@@ -26,6 +26,7 @@ class MRHelperBot(commands.Bot):
 
     async def on_ready(self) -> None:
         self.settings = await Settings.load_from_db()
+        await self.sync_commands()
 
         logger.debug(f'Settings is loaded: {vars(self.settings)}')
         logger.info(f'{self.user} is ready!')
