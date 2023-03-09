@@ -15,14 +15,14 @@ class BotMessage(commands.Cog):
     def __init__(self, bot: 'MRHelperBot') -> None:
         self.bot = bot
 
-    msg = SlashCommandGroup(
-        'msg',
+    m = SlashCommandGroup(
+        'm',
         description='Сообщения от бота',
         default_member_permissions=discord.Permissions(administrator=True),
         checks=[utils.is_ctx_from_admin],
     )
 
-    @msg.command(description='Отправка сообщения от имени бота в текущий канал')
+    @m.command(description='Отправка сообщения от имени бота в текущий канал')
     async def send(
         self,
         ctx: discord.ApplicationContext,
@@ -31,7 +31,7 @@ class BotMessage(commands.Cog):
     ) -> None:
         await ctx.send_modal(SendMessage(self.bot, text, template))
 
-    @msg.error
+    @m.error
     async def msg_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:  # noqa: ARG002
         await ctx.interaction.response.send_message(messages.SOMETHING_WRONG, ephemeral=True)
 

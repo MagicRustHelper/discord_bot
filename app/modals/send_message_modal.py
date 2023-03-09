@@ -42,11 +42,6 @@ class SendMessage(discord.ui.Modal):
         embed = discord.Embed(
             color=utils.get_random_blue_color(),
         )
-        embed.set_author(
-            name='MAGIC RUST',
-            icon_url=self.client.settings.magic_avatar_url,
-            url=self.client.settings.VK_MAGIC_RUST_URL,
-        )
 
         embed.add_field(
             name='',
