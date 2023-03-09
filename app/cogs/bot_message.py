@@ -23,8 +23,13 @@ class BotMessage(commands.Cog):
     )
 
     @msg.command(description='Отправка сообщения от имени бота в текущий канал')
-    async def send(self, ctx: discord.ApplicationContext, template: discord.Option(str, required=False)) -> None:
-        await ctx.send_modal(SendMessage(self.bot, template))
+    async def send(
+        self,
+        ctx: discord.ApplicationContext,
+        text: discord.Option(str, required=False),
+        template: discord.Option(str, required=False),
+    ) -> None:
+        await ctx.send_modal(SendMessage(self.bot, text, template))
 
     @msg.error
     async def msg_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:  # noqa: ARG002

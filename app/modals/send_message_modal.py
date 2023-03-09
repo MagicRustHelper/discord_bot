@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 
 
 class SendMessage(discord.ui.Modal):
-    def __init__(self, client: 'MRHelperBot', template: Optional[str] = None) -> None:
+    def __init__(self, client: 'MRHelperBot', text: Optional[str] = None, template: Optional[str] = None) -> None:
+        self.text = text or ''
         self.client = client
         self.template = template
 
@@ -42,7 +43,7 @@ class SendMessage(discord.ui.Modal):
             color=utils.get_random_blue_color(),
         )
         embed.set_author(
-            name='MagicRust',
+            name='MAGIC RUST',
             icon_url=self.client.settings.magic_avatar_url,
             url=self.client.settings.VK_MAGIC_RUST_URL,
         )
@@ -58,6 +59,6 @@ class SendMessage(discord.ui.Modal):
             embed.set_image(url=image_url)
 
         channel = await self.client.fetch_channel(interaction.channel_id)
-        message = await channel.send(embed=embed)
+        message = await channel.send(content=self.text, embed=embed)
         logger.info(f'{interaction.user} опубликовал новость от имени бота в канал {channel} ID: {message.id}')
         await interaction.response.send_message('Новость отправлена!', ephemeral=True)
