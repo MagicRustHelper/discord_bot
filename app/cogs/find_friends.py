@@ -17,9 +17,26 @@ class FindFriends(commands.Cog):
 
     @commands.Cog.listener('on_message')
     async def delete_message_in_friend_channel(self, message: discord.Message) -> None:
-        if message.channel.id == self.bot.settings.find_friends_channel and not message.author.bot:
-            await message.delete(reason='В канале разрешено только использования команды по поиску друга')
-            await message.author.send(messages.MESSAGE_IN_FIND_CHANNEL)
+        if message.author.bot:
+            return
+        if not (message.channel.id == self.bot.settings.find_friends_channel):
+            return
+
+        if message.guild.owner_id == message.author.id:
+            return
+
+        admin = False
+        user_roles = message.author.roles
+        for role in user_roles:
+            if role.permissions.administrator:
+                admin = True
+                break
+
+        if admin:
+            return
+
+        await message.delete(reason='В канале разрешено только использования команды по поиску друга')
+        await message.author.send(messages.MESSAGE_IN_FIND_CHANNEL)
 
     @commands.slash_command()
     @commands.dynamic_cooldown(find_friend_cooldown.discord_cooldown, type=commands.BucketType.user)
