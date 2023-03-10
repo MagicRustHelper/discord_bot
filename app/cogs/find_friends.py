@@ -3,9 +3,10 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands
 
-from app.core import messages
+from app.core import messages, utils
 from app.modals import FindFriendModal
 from app.tools import find_friend_cooldown
+from app.tools.time import human_time
 
 if TYPE_CHECKING:
     from app.bot import MRHelperBot
@@ -19,20 +20,14 @@ class FindFriends(commands.Cog):
     async def delete_message_in_friend_channel(self, message: discord.Message) -> None:
         if message.author.bot:
             return
+
         if not (message.channel.id == self.bot.settings.find_friends_channel):
             return
 
         if message.guild.owner_id == message.author.id:
             return
 
-        admin = False
-        user_roles = message.author.roles
-        for role in user_roles:
-            if role.permissions.administrator:
-                admin = True
-                break
-
-        if admin:
+        if utils.is_member_admin(message.author):
             return
 
         await message.delete(reason='В канале разрешено только использования команды по поиску друга')
@@ -46,7 +41,7 @@ class FindFriends(commands.Cog):
     @friend.error
     async def friend_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:
         if isinstance(error, commands.CommandOnCooldown):
-            text = messages.FIND_COOLDOWN.format(error.cooldown.per, error.retry_after)
+            text = messages.FIND_COOLDOWN.format(human_time(error.cooldown.per), human_time(error.retry_after))
             await ctx.respond(text, ephemeral=True)
 
 

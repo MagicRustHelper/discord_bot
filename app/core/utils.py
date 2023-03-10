@@ -1,7 +1,7 @@
 import random
 from typing import TYPE_CHECKING
 
-from discord import ApplicationContext, Color
+from discord import ApplicationContext, Color, Member
 from loguru import logger
 
 if TYPE_CHECKING:
@@ -36,3 +36,11 @@ async def is_ctx_from_admin(ctx: ApplicationContext) -> bool:
     if ctx.author.id in admins_id:
         return True
     return False
+
+
+async def is_member_admin(member: Member) -> bool:
+    user_roles = member.roles
+    for role in user_roles:
+        if role.permissions.administrator:
+            return True
+    return True

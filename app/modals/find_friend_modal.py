@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 import discord
 
+from app.core import utils
 from app.tools import find_friend_cooldown
 
 if TYPE_CHECKING:
@@ -14,7 +15,9 @@ class FindFriendModal(discord.ui.Modal):
 
         self.add_item(
             discord.ui.InputText(
-                label='Заголовок', placeholder='Ищу команду, напарника. Проводим набор в клан', max_length=50
+                label='Заголовок',
+                placeholder='Ищу команду, напарника. Проводим набор в клан',
+                max_length=50,
             )
         )
         self.add_item(
@@ -23,34 +26,37 @@ class FindFriendModal(discord.ui.Modal):
                 style=discord.InputTextStyle.long,
                 required=False,
                 placeholder='Мне 19 лет, адекват, 500 часов.\nили\nФорма заявки: ...',
+                max_length=1024,
             )
         )
         self.add_item(
             discord.ui.InputText(
                 label='Номер(а) сервера(-ов) MAGIC RUST',
                 placeholder='обязательно укажите НОМЕР(А) СЕРВЕРА(-ОВ) MR',
+                max_length=20,
             )
         )
 
     async def callback(self, interaction: discord.Interaction) -> None:
         client: 'MRHelperBot' = interaction.client
+        if find_friend_cooldown.get_cooldown(interaction.user.id):
+            return await interaction.response.send_message(
+                'Хм... Либо ты пытался напокостить, либо что то пошло не так.', ephemeral=True
+            )
         find_friend_cooldown.add_cooldown(user_id=interaction.user.id, cooldown=client.settings.find_friends_cooldown)
 
-        embed = discord.Embed(
-            title=self.children[0].value, color=discord.Color.blurple()
-        )  # TODO: Поставить цвет приблежнный к магик расту
+        embed = discord.Embed(title=self.children[0].value, color=utils.get_random_blue_color())
 
         embed.set_author(
             name=interaction.user.name,
             icon_url=self._get_avatar(interaction, client),
         )
         embed.add_field(name='', value=self.children[1].value, inline=False)
-        embed.add_field(name='Сервера', value=self.children[2].value, inline=False)
+        embed.add_field(name='Номера серверов MAGIC RUST', value=self.children[2].value, inline=False)
 
         find_friend_channel = await interaction.guild.fetch_channel(client.settings.find_friends_channel)
         await find_friend_channel.send(content=interaction.user.mention, embed=embed)
         await interaction.response.send_message('Форма отправлена.', ephemeral=True)
-        # await interaction.response.send_message(embeds=[embed])
 
     def _get_avatar(self, interaction: discord.Interaction, client: 'MRHelperBot') -> str:
         if interaction.user.avatar:

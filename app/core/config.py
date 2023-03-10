@@ -16,8 +16,6 @@ class ApplicationConfig:
     }
     SQLALCHEMY_DATABASE_URI: str | None = None
 
-    DISCORD_GUILD_IDS = [670517112112152587, 344056635787837442]
-
     def __init__(self) -> None:
         self.SQLALCHEMY_DATABASE_URI = self.get_uri_from_env()
 
