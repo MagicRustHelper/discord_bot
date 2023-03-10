@@ -38,9 +38,9 @@ async def is_ctx_from_admin(ctx: ApplicationContext) -> bool:
     return False
 
 
-async def is_member_admin(member: Member) -> bool:
+def is_member_admin(member: Member) -> bool:
     user_roles = member.roles
     for role in user_roles:
         if role.permissions.administrator:
             return True
-    return True
+    return False
