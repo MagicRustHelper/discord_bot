@@ -52,7 +52,10 @@ class FindFriendModal(discord.ui.Modal):
             icon_url=self._get_avatar(interaction, client),
         )
         embed.add_field(name='', value=self.children[1].value, inline=False)
-        embed.add_field(name='Сервер ', value='MR# ' + self.children[2].value, inline=False)
+        server_text = self.children[2].value
+        if not ('mr' in server_text.lower() or 'magic' in server_text.lower()):
+            server_text = 'MR# ' + server_text
+        embed.add_field(name='Сервер ', value=server_text, inline=False)
 
         find_friend_channel = await interaction.guild.fetch_channel(client.settings.find_friends_channel)
         await find_friend_channel.send(content=interaction.user.mention, embed=embed)

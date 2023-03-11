@@ -41,7 +41,9 @@ class FindFriends(commands.Cog):
     @friend.error
     async def friend_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:
         if isinstance(error, commands.CommandOnCooldown):
-            text = messages.FIND_COOLDOWN.format(human_time(error.cooldown.per), human_time(error.retry_after))
+            text = messages.FIND_COOLDOWN.format(
+                human_time(self.bot.settings.find_friends_cooldown), human_time(error.retry_after)
+            )
             await ctx.respond(text, ephemeral=True)
 
 
