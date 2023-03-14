@@ -5,7 +5,8 @@ from discord.commands import SlashCommandGroup
 from discord.ext import commands
 
 from app.core import messages, utils
-from app.modals import SendMessage
+from app.modals import SendMessageModal
+from app.tools.template import MessageTemplates
 
 if TYPE_CHECKING:
     from app.bot import MRHelperBot
@@ -26,10 +27,17 @@ class BotMessage(commands.Cog):
     async def send(
         self,
         ctx: discord.ApplicationContext,
-        text: discord.Option(str, required=False),
-        template: discord.Option(str, required=False),
+        text: discord.Option(str, required=False, description='Текст который будет находится помимо ембеда'),
+        template: discord.Option(
+            str,
+            required=False,
+            description='Шаблоны сообщений',
+            autocomplete=MessageTemplates.get_all_names_autocomplete,
+        ),
     ) -> None:
-        await ctx.send_modal(SendMessage(self.bot, text, template))
+        if template:
+            template = await MessageTemplates.get_template(template)
+        await ctx.send_modal(SendMessageModal(self.bot, text, template))
 
     @m.error
     async def msg_on_error(self, ctx: discord.ApplicationContext, error: commands.CommandError) -> None:  # noqa: ARG002

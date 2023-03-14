@@ -15,5 +15,6 @@ class DiscordConfig(Base):
     # Find friends settings
     find_friends_cooldown: Mapped[Optional[int]] = mapped_column(BigInteger, default=None)
     find_friends_channel: Mapped[Optional[int]] = mapped_column(BigInteger, default=None)
+    log_message_channel: Mapped[Optional[int]] = mapped_column(BigInteger, default=None)
 
     # Send by bot settings

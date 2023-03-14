@@ -15,6 +15,8 @@ class ApplicationConfig:
         'guilds': True,
     }
     SQLALCHEMY_DATABASE_URI: str | None = None
+    DEFAULT_DISCORD_AVATAR_LINK: str = 'https://cdn.discordapp.com/embed/avatars/0.png'
+    OWNER_ID = 223462256355180544
 
     def __init__(self) -> None:
         self.SQLALCHEMY_DATABASE_URI = self.get_uri_from_env()

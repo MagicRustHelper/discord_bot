@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import discord
 from discord.ext import commands
 
-from app.core import messages, utils
+from app.core import messages
 from app.modals import FindFriendModal
 from app.tools import find_friend_cooldown
 from app.tools.time import human_time
@@ -16,24 +16,7 @@ class FindFriends(commands.Cog):
     def __init__(self, bot: 'MRHelperBot'):
         self.bot = bot
 
-    @commands.Cog.listener('on_message')
-    async def delete_message_in_friend_channel(self, message: discord.Message) -> None:
-        if message.author.bot:
-            return
-
-        if not (message.channel.id == self.bot.settings.find_friends_channel):
-            return
-
-        if message.guild.owner_id == message.author.id:
-            return
-
-        if utils.is_member_admin(message.author):
-            return
-
-        await message.delete(reason='В канале разрешено только использования команды по поиску друга')
-        await message.author.send(messages.MESSAGE_IN_FIND_CHANNEL)
-
-    @commands.slash_command()
+    @commands.slash_command(description='Создание формы на поиск друга')
     @commands.dynamic_cooldown(find_friend_cooldown.discord_cooldown, type=commands.BucketType.user)
     async def friend(self, ctx: discord.ApplicationContext) -> None:
         await ctx.send_modal(FindFriendModal())

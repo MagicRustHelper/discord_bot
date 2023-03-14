@@ -4,29 +4,41 @@ import discord
 from loguru import logger
 
 from app.core import utils
+from app.tools.template import MessageTemplates
 
 if TYPE_CHECKING:
     from app.bot import MRHelperBot
 
+MODAL_TITLE_MAX_LENGTH = 45
 
-class SendMessage(discord.ui.Modal):
-    def __init__(self, client: 'MRHelperBot', text: Optional[str] = None, template: Optional[str] = None) -> None:
+
+class SendMessageModal(discord.ui.Modal):
+    def __init__(
+        self, client: 'MRHelperBot', text: Optional[str] = None, template: Optional[MessageTemplates] = None
+    ) -> None:
         self.text = text or ''
         self.client = client
         self.template = template
 
         title = 'Отправка сообщения от бота'
-        title += f'с шаблоном {template}' if template else ''
-        if len(title) > 45:
-            title = title[:45]
+        title += f' с шаблоном {template.name}' if template else ''
+        if len(title) > MODAL_TITLE_MAX_LENGTH:
+            title = title[:MODAL_TITLE_MAX_LENGTH]
         super().__init__(title=title)
+
+        if template:
+            value_text, value_image = template.text, template.image_url
+        else:
+            value_text, value_image = None, None
 
         self.add_item(
             discord.ui.InputText(
                 label='Текст',
                 placeholder='Вышло обновление и давали писи с попами!! И в расте можно какать.',
+                value=value_text,
                 style=discord.InputTextStyle.long,
                 required=False,
+                max_length=1024,
             ),
         )
 
@@ -34,6 +46,7 @@ class SendMessage(discord.ui.Modal):
             discord.ui.InputText(
                 label='Ссылка на картинку',
                 placeholder='Прямая ссылка на картинку',
+                value=value_image,
                 required=False,
             )
         )

@@ -44,3 +44,11 @@ def is_member_admin(member: Member) -> bool:
         if role.permissions.administrator:
             return True
     return False
+
+
+def framing_message(message: str) -> str:
+    return '```\n' + message + '\n```'
+
+
+def bold_message(message: str) -> str:
+    return '**' + message + '**'

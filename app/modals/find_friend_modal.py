@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import discord
 
-from app.core import utils
+from app.core import app_config, utils
 from app.tools import find_friend_cooldown
 
 if TYPE_CHECKING:
@@ -49,7 +49,7 @@ class FindFriendModal(discord.ui.Modal):
 
         embed.set_author(
             name=interaction.user.name,
-            icon_url=self._get_avatar(interaction, client),
+            icon_url=self._get_avatar(interaction),
         )
         embed.add_field(name='', value=self.children[1].value, inline=False)
         server_text = self.children[2].value
@@ -57,12 +57,12 @@ class FindFriendModal(discord.ui.Modal):
             server_text = 'MR# ' + server_text
         embed.add_field(name='Сервер ', value=server_text, inline=False)
 
-        find_friend_channel = await interaction.guild.fetch_channel(client.settings.find_friends_channel)
+        find_friend_channel = await client.fetch_channel(client.settings.find_friends_channel)
         await find_friend_channel.send(content=interaction.user.mention, embed=embed)
         await interaction.response.send_message('Форма отправлена.', ephemeral=True)
 
-    def _get_avatar(self, interaction: discord.Interaction, client: 'MRHelperBot') -> str:
+    def _get_avatar(self, interaction: discord.Interaction) -> str:
         if interaction.user.avatar:
             return interaction.user.avatar.url
         else:
-            return client.settings.magic_avatar_url
+            return app_config.DEFAULT_DISCORD_AVATAR_LINK

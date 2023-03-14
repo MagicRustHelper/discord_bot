@@ -36,6 +36,7 @@ ignore = ['ANN101', 'ANN204', 'ANN401', 'ANN002', 'ANN003', 'PLR0913']
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"] # Unused import
 "tests/*" = ['ANN']  # Annotations
+"app/tools/time.py" = ['PLR2004']
 "migration/*" = ['F']
 
 [tool.ruff.flake8-quotes]
