@@ -7,7 +7,14 @@ from loguru import logger
 
 from app.core import Settings, app_config
 
-COGS = ('cogs.find_friends', 'cogs.find_friends_events', 'cogs.settings', 'cogs.bot_message', 'cogs.templates')
+COGS = (
+    'cogs.find_friends',
+    'cogs.find_friends_events',
+    'cogs.settings',
+    'cogs.bot_message',
+    'cogs.templates',
+    'cogs.get_logs',
+)
 
 
 class MRHelperBot(commands.Bot):

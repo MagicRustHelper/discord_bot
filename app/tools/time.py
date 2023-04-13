@@ -15,7 +15,7 @@ def human_time(seconds: int) -> str:
 
     if text == '':
         seconds_text = num_to_words(seconds, word_forms=('секунда', 'секунды', 'секунд'))
-        return f'{seconds} {seconds_text}'
+        return f'{int(seconds)} {seconds_text}'
 
     return text
 

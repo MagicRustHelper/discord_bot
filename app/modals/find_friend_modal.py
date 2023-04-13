@@ -43,8 +43,6 @@ class FindFriendModal(discord.ui.Modal):
             return await interaction.response.send_message(
                 'Хм... Либо ты пытался напокостить, либо что то пошло не так.', ephemeral=True
             )
-        find_friend_cooldown.add_cooldown(user_id=interaction.user.id, cooldown=client.settings.find_friends_cooldown)
-
         embed = discord.Embed(title=self.children[0].value, color=utils.get_random_blue_color())
 
         embed.set_author(

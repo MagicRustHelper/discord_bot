@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 from app.core import messages, utils
+from app.tools import find_friend_cooldown
 
 if TYPE_CHECKING:
     from app.bot import MRHelperBot
@@ -13,6 +14,17 @@ if TYPE_CHECKING:
 class FindFriendsEvents(commands.Cog):
     def __init__(self, bot: 'MRHelperBot'):
         self.bot = bot
+
+    @commands.Cog.listener('on_message')
+    async def cooldown_post(self, message: discord.Message) -> None:
+        if not message.author.bot or message.channel.id != self.bot.settings.find_friends_channel:
+            return
+
+        if message.channel.type == discord.ChannelType.private:
+            return
+
+        user_id = int(message.content[2:-1])
+        find_friend_cooldown.add_cooldown(user_id, self.bot.settings.find_friends_cooldown)
 
     @commands.Cog.listener('on_message')
     async def delete_message_in_friend_channel(self, message: discord.Message) -> None:
